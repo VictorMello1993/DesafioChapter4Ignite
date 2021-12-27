@@ -1,0 +1,48 @@
+version: "3.7"
+services:
+# Container do banco de dados
+  finance_db:
+    image: postgres #Imagem oficial disponível no Docke Hub
+    container_name: finance_db
+    restart: always
+    ports:
+      - 5432:5432 #Porta padrão do Postgres
+    environment:
+      - POSTGRES_USER=finuser
+      - POSTGRES_PASSWORD=ignite
+      - POSTGRES_DB=finance_db
+    volumes:
+      # Volume que armazena o driver do postgres dentro do container
+      - pgdata:/data/postgres
+
+# Container da aplicação
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: finance_api
+    ports:
+      - 3333:3333
+      - 9229:9229
+    tty: true
+    volumes:
+    # Criando um volume passando os arquivos que estão no diretório atual da máquina local para o diretório do container
+      - .:/usr/app
+
+    # Faz uma ligação entre os containers, de forma que o container de destino (api) tenha informações do container de
+    # origem (banco de dados). Dessa forma, o service da api não irá se comunicar através do IP, mas sim pelo nome
+    # do container.
+    links:
+      - finance_db
+
+    # Essa propriedade indica que para executar o service da aplicação, é preciso primeiro executar o service do banco de dados
+    depends_on:
+      - finance_db
+
+    restart: always
+
+# Volume local onde será armazenado o driver do Postgres
+volumes:
+  pgdata:
+    driver: local
+

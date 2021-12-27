@@ -1,13 +1,14 @@
 import 'reflect-metadata';
 import 'express-async-errors';
-
 import express from 'express';
 import cors from 'cors';
-
 import './database';
 import './shared/container';
 import { router } from './routes';
 import { AppError } from './shared/errors/AppError';
+import createConnection from '../src/database'
+
+createConnection('finance_db');
 
 const app = express();
 

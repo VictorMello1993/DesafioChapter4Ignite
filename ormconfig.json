@@ -1,19 +1,14 @@
 {
-  "username": "postgres",
-  "password": "docker",
-
-  "name": "default",
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
-  "database": "fin_api",
-  "entities": [
-    "./src/modules/**/entities/*.ts"
-  ],
-  "migrations": [
-    "./src/database/migrations/*.ts"
-  ],
+  "username": "finuser",
+  "password": "ignite",
+  "database": "finance_db",
+  "entities": ["./src/modules/**/entities/*.ts"],
+  "migrations": ["./src/database/migrations/*.ts"],
   "cli": {
-    "migrationsDir": "./src/database/migrations"
+    "migrationsDir": "./src/database/migrations",
+    "entitiesDir": "./src/modules/**/entities"
   }
 }
