@@ -4,7 +4,7 @@
   "port": 5432,
   "username": "finuser",
   "password": "ignite",
-  "database": "finance_db",
+  "database": "fin_api",
   "entities": ["./src/modules/**/entities/*.ts"],
   "migrations": ["./src/database/migrations/*.ts"],
   "cli": {

@@ -8,7 +8,7 @@ import { router } from './routes';
 import { AppError } from './shared/errors/AppError';
 import createConnection from '../src/database'
 
-createConnection('finance_db');
+createConnection('fin_api');
 
 const app = express();
 

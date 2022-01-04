@@ -8,7 +8,7 @@ export default {
   // automock: false,
 
   // Stop running tests after `n` failures
-  bail: 0,
+  bail: true,
 
   // The directory where Jest should store its cached dependency information
   // cacheDirectory: "C:\\Users\\Victor93\\AppData\\Local\\Temp\\jest",
@@ -81,7 +81,7 @@ export default {
   // ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
-  // moduleNameMapper: {},
+  // moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src' })
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
   // modulePathIgnorePatterns: [],
