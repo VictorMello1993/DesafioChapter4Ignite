@@ -4,6 +4,7 @@ import { InMemoryUsersRepository } from "../../../users/repositories/in-memory/I
 import { CreateUserUseCase } from "../../../users/useCases/createUser/CreateUserUseCase"
 import { CreateStatementUseCase } from "../../../statements/useCases/createStatement/CreateStatementUseCase"
 import { GetStatementOperationUseCase } from "./GetStatementOperationUseCase"
+import { GetStatementOperationError } from "./GetStatementOperationError"
 
 let usersRepositoryInMemory: InMemoryUsersRepository
 let statementsRepositoryInMemory: InMemoryStatementsRepository
@@ -41,10 +42,21 @@ describe('Get statement operation', () => {
   })
 
   it('It should not be able to get a statement operation if user does not exist', async() => {
-      // Será implementado depois
+    expect(async() => {
+      await getStatementOperationUseCase.execute({user_id: 'blabla', statement_id: 'eeeee'})
+    }).rejects.toBeInstanceOf(GetStatementOperationError.UserNotFound);
   })
 
   it('It should not be able to get a statement operation if statement itself does not exist', async() => {
-    // Será implementado depois
-})
+    expect(async() => {
+      const user = await createUserUseCase.execute({
+        name: 'User name',
+        email: 'test@test.com',
+        password: '1234'
+      });
+
+      await getStatementOperationUseCase.execute({user_id: user.id, statement_id: 'eeeee'})
+
+    }).rejects.toBeInstanceOf(GetStatementOperationError.StatementNotFound);
+  })
 })

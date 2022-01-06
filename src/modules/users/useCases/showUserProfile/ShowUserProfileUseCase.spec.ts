@@ -1,6 +1,7 @@
 import { InMemoryUsersRepository } from "../../repositories/in-memory/InMemoryUsersRepository";
 import { CreateUserUseCase } from "../createUser/CreateUserUseCase";
 import { ShowUserProfileUseCase } from "../showUserProfile/ShowUserProfileUseCase";
+import { ShowUserProfileError } from "./ShowUserProfileError";
 
 let usersRepositoryInMemory: InMemoryUsersRepository
 let createUserUseCase: CreateUserUseCase
@@ -25,4 +26,10 @@ describe('Show user profile', () => {
     expect(userExists).toEqual(user)
 
   });
+
+  it('It should not be able to list non-exist user profile', async() => {
+    expect(async () => {
+      await showUserProfileUseCase.execute('blabla')
+    }).rejects.toBeInstanceOf(ShowUserProfileError);
+  })
 })
