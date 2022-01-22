@@ -3,7 +3,7 @@ import { container } from 'tsyringe';
 import { TransferBetweenAccountsUseCase } from './TransferBetweenAccountsUseCase';
 
 class TransferBetweenAccountsController{
-  async handle(request: Request, response: Response): Promise<Response> {
+  async execute(request: Request, response: Response): Promise<Response> {
     const {id: user_id} = request.user;
     const {destination_user_id} = request.params;
     const {amount, description} = request.body;
