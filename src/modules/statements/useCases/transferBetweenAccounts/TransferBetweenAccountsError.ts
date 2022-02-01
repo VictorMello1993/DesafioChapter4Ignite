@@ -12,4 +12,10 @@ export namespace TransferBetweenAccountsError {
       super('Insufficient funds', 400);
     }
   }
+
+  export class SenderUserIsReceiverUser extends AppError {
+    constructor() {
+      super('Sender user is receiver user', 400);
+    }
+  }
 }

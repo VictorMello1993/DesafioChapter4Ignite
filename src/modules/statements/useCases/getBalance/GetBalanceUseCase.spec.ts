@@ -32,21 +32,24 @@ describe('Get balance', () => {
       user_id: user.id,
       type: OperationType.DEPOSIT,
       amount: 800,
-      description: 'deposit test'
+      description: 'deposit test',
+      sender_id: null
     })
 
     await createStatementUseCase.execute({
       user_id: user.id,
       type: OperationType.DEPOSIT,
       amount: 1200,
-      description: 'deposit test2'
+      description: 'deposit test2',
+      sender_id: null
     })
 
     await createStatementUseCase.execute({
       user_id: user.id,
       type: OperationType.WITHDRAW,
       amount: 400,
-      description: 'withdraw test'
+      description: 'withdraw test',
+      sender_id: null
     })
 
     const balance = await getBalanceUseCase.execute({user_id: user.id})

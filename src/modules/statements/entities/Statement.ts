@@ -25,9 +25,16 @@ export class Statement {
   @Column('uuid')
   user_id: string;
 
+  @Column('uuid')
+  sender_id: string;
+
   @ManyToOne(() => User, user => user.statement)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => User, user => user.statement)
+  @JoinColumn({ name: 'sender_id' })
+  userSender: User;
 
   @Column()
   description: string;

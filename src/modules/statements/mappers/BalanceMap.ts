@@ -11,7 +11,7 @@ export class BalanceMap {
       updated_at,
       user_id
     }) => {
-      if (type === OperationType.TRANSFEROUT) {
+      if (type.includes('transfer')) {
         return {
           id,
           sender_id: user_id,

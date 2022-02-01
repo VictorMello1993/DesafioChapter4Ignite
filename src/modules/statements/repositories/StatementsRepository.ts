@@ -1,8 +1,8 @@
 import { getRepository, Repository } from "typeorm";
-import { Statement } from "../entities/Statement";
+import { OperationType, Statement } from "../entities/Statement";
 import { ICreateStatementDTO } from "../useCases/createStatement/ICreateStatementDTO";
 import { IGetBalanceDTO } from "../useCases/getBalance/IGetBalanceDTO";
-import { IGetStatementOperationDTO } from "../useCases/getStatementOperation/IGetStatementOperationDTO";
+import { IGetStatementByUserDTO, IGetStatementOperationDTO } from "../useCases/getStatementOperation/IGetStatementOperationDTO";
 import { IStatementsRepository } from "./IStatementsRepository";
 
 export class StatementsRepository implements IStatementsRepository {
@@ -16,14 +16,21 @@ export class StatementsRepository implements IStatementsRepository {
     user_id,
     amount,
     description,
-    type
+    type,
+    sender_id
   }: ICreateStatementDTO): Promise<Statement> {
-    const statement = this.repository.create({
+    const statement = !type.includes('transfer') ? this.repository.create({
       user_id,
       amount,
       description,
-      type
-    });
+      type,
+    }) : this.repository.create({
+      user_id,
+      amount,
+      description,
+      type,
+      sender_id
+    })
 
     return this.repository.save(statement);
   }
@@ -34,7 +41,7 @@ export class StatementsRepository implements IStatementsRepository {
     });
   }
 
-  async getUserBalance({ user_id, with_statement = false }: IGetBalanceDTO):
+  async getUserBalance({ user_id, sender_id, with_statement = false }: IGetBalanceDTO):
     Promise<
       { balance: number } | { balance: number, statement: Statement[] }
     >
@@ -42,6 +49,12 @@ export class StatementsRepository implements IStatementsRepository {
     const statement = await this.repository.find({
       where: { user_id }
     });
+
+    const indexTransfer = statement.findIndex(stm => stm.type === 'transfer_in');
+
+    if(indexTransfer !== - 1){
+      statement[indexTransfer].user_id = sender_id;
+    }
 
     const balance = statement.reduce((acc, operation) => {
       if (operation.type === 'deposit' || operation.type === 'transfer_in') {
@@ -59,5 +72,10 @@ export class StatementsRepository implements IStatementsRepository {
     }
 
     return { balance }
+  }
+
+  async findStatementByUser ({user_id}: IGetStatementByUserDTO): Promise<Statement[]>{
+    const statements = this.repository.find({where: {user_id}})
+    return statements;
   }
 }

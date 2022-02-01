@@ -29,14 +29,18 @@ class TransferBetweenAccountsUseCase{
       throw new TransferBetweenAccountsError.UserNotFound();
     }
 
+    if(destinationUser.id === senderUser.id){
+      throw new TransferBetweenAccountsError.SenderUserIsReceiverUser();
+    }
+
     const { balance } = await this.statementsRepository.getUserBalance({ user_id: sender_id });
 
     if(balance < amount){
       throw new TransferBetweenAccountsError.InsufficientFunds();
     }
 
-    const statement1 = await this.statementsRepository.create({user_id: sender_id, type: OperationType.TRANSFEROUT, amount, description})
-    const statement2 = await this.statementsRepository.create({user_id: destination_user_id, type: OperationType.TRANSFERIN, amount, description})
+    const statement1 = await this.statementsRepository.create({user_id: sender_id, type: OperationType.TRANSFEROUT, amount, description, sender_id})
+    const statement2 = await this.statementsRepository.create({user_id: destination_user_id, type: OperationType.TRANSFERIN, amount, description, sender_id})
 
     return {transfer_in: statement2, transfer_out: statement1}
   }

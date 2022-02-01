@@ -31,8 +31,12 @@ export class GetBalanceUseCase {
       throw new GetBalanceError();
     }
 
+    const transferStatement = await this.statementsRepository.findStatementByUser({user_id});
+    const indexTransfer = transferStatement.findIndex(stm => stm.type === 'transfer_in');
+
     const balance = await this.statementsRepository.getUserBalance({
       user_id,
+      sender_id: transferStatement[indexTransfer].sender_id,
       with_statement: true
     });
 

@@ -1,7 +1,7 @@
 import { Statement } from "../../entities/Statement";
 import { ICreateStatementDTO } from "../../useCases/createStatement/ICreateStatementDTO";
 import { IGetBalanceDTO } from "../../useCases/getBalance/IGetBalanceDTO";
-import { IGetStatementOperationDTO } from "../../useCases/getStatementOperation/IGetStatementOperationDTO";
+import { IGetStatementByUserDTO, IGetStatementOperationDTO } from "../../useCases/getStatementOperation/IGetStatementOperationDTO";
 import { IStatementsRepository } from "../IStatementsRepository";
 
 export class InMemoryStatementsRepository implements IStatementsRepository {
@@ -21,31 +21,36 @@ export class InMemoryStatementsRepository implements IStatementsRepository {
     return this.statements.find(operation => (
       operation.id === statement_id &&
       operation.user_id === user_id
-    ));
-  }
-
-  async getUserBalance({ user_id, with_statement = false }: IGetBalanceDTO):
-    Promise<
-      { balance: number } | { balance: number, statement: Statement[] }
-    >
-  {
-    const statement = this.statements.filter(operation => operation.user_id === user_id);
-
-    const balance = statement.reduce((acc, operation) => {
-      if (operation.type === 'deposit' || operation.type === 'transfer_in') {
-        return acc + operation.amount;
-      } else {
-        return acc - operation.amount;
-      }
-    }, 0)
-
-    if (with_statement) {
-      return {
-        statement,
-        balance
-      }
+      ));
     }
 
-    return { balance }
+    async getUserBalance({ user_id, with_statement = false }: IGetBalanceDTO):
+    Promise<
+    { balance: number } | { balance: number, statement: Statement[] }
+    >
+    {
+      const statement = this.statements.filter(operation => operation.user_id === user_id);
+
+      const balance = statement.reduce((acc, operation) => {
+        if (operation.type === 'deposit' || operation.type === 'transfer_in') {
+          return acc + operation.amount;
+        } else {
+          return acc - operation.amount;
+        }
+      }, 0)
+
+      if (with_statement) {
+        return {
+          statement,
+          balance
+        }
+      }
+
+      return { balance }
+    }
+
+    async findStatementByUser ({user_id}): Promise<Statement[]>{
+      const statements = this.statements.filter(statement => statement.user_id === user_id);
+      return statements;
+    }
   }
-}
