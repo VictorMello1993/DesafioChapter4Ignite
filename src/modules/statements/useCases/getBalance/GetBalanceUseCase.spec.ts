@@ -32,24 +32,21 @@ describe('Get balance', () => {
       user_id: user.id,
       type: OperationType.DEPOSIT,
       amount: 800,
-      description: 'deposit test',
-      sender_id: null
+      description: 'deposit test'
     })
 
     await createStatementUseCase.execute({
       user_id: user.id,
       type: OperationType.DEPOSIT,
       amount: 1200,
-      description: 'deposit test2',
-      sender_id: null
+      description: 'deposit test2'
     })
 
     await createStatementUseCase.execute({
       user_id: user.id,
       type: OperationType.WITHDRAW,
       amount: 400,
-      description: 'withdraw test',
-      sender_id: null
+      description: 'withdraw test'
     })
 
     const balance = await getBalanceUseCase.execute({user_id: user.id})
@@ -63,5 +60,4 @@ describe('Get balance', () => {
       await getBalanceUseCase.execute({user_id: 'blabla'})
     }).rejects.toBeInstanceOf(GetBalanceError);
   })
-
 })

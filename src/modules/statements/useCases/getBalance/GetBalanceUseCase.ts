@@ -36,7 +36,7 @@ export class GetBalanceUseCase {
 
     const balance = await this.statementsRepository.getUserBalance({
       user_id,
-      sender_id: transferStatement[indexTransfer].sender_id,
+      sender_id: indexTransfer !== -1 ? transferStatement[indexTransfer].sender_id : null,
       with_statement: true
     });
 

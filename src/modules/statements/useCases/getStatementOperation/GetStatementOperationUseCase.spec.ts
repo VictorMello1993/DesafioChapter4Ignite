@@ -32,8 +32,7 @@ describe('Get statement operation', () => {
       { user_id: user.id,
         type: OperationType.DEPOSIT,
         amount: 800,
-        description: 'deposit test',
-        sender_id: null,
+        description: 'deposit test'
       })
 
     const operation = await getStatementOperationUseCase.execute({user_id: user.id, statement_id: statement.id});

@@ -34,8 +34,7 @@ export class CreateStatementUseCase {
       user_id,
       type,
       amount,
-      description,
-      sender_id: null
+      description
     });
 
     return statementOperation;
