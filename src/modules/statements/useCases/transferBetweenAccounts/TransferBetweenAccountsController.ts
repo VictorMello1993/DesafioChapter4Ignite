@@ -10,9 +10,9 @@ class TransferBetweenAccountsController{
 
     const transfer = container.resolve(TransferBetweenAccountsUseCase);
 
-    const result = await transfer.execute({amount, description, sender_id: user_id, destination_user_id: id})
+    await transfer.execute({amount, description, sender_id: user_id, destination_user_id: id})
 
-    return response.json(result).json(201);
+    return response.status(201).send();
   }
 }
 
